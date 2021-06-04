@@ -1,0 +1,119 @@
+package com.example.firebasedemo;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.firebasedemo.activity.AddContactActivity;
+import com.example.firebasedemo.activity.AddPostActivity;
+import com.example.firebasedemo.activity.EditProfileActivity;
+import com.example.firebasedemo.adapter.PostAdapter;
+import com.example.firebasedemo.model.getall.MyPost;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+public class FragmentProfile extends Fragment {
+    private Button btnAdd;
+    private TextView nameProfile,emailProfile,phoneProfile;
+    private LinearLayout editProfile;
+    private ImageView avatarProfile;
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore fStore;
+    private DatabaseReference myRef;
+    private String userId;
+    private FirebaseUser user;
+    private StorageReference storageReference;
+
+    private RecyclerView recycleHome;
+    List<MyPost> myPosts;
+    private PostAdapter adapter;
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        View v= inflater.inflate(R.layout.fragment_profile, container, false);
+        init(v);
+
+        DocumentReference documentReference = fStore.collection("users").document(userId);
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if(documentSnapshot.exists()){
+                    phoneProfile.setText(documentSnapshot.getString("phone"));
+                    nameProfile.setText(documentSnapshot.getString("fName"));
+                    emailProfile.setText(documentSnapshot.getString("email"));
+
+                }else {
+                    Log.d("tag", "onEvent: Document do not exists");
+                }
+            }
+        });
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),
+                        AddPostActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(getContext(),EditProfileActivity.class);
+                i.putExtra("fullName",nameProfile.getText().toString());
+                i.putExtra("email",emailProfile.getText().toString());
+                i.putExtra("phone",phoneProfile.getText().toString());
+                startActivity(i);
+
+            }
+        });
+
+        return v;
+    }
+
+    private void init(View v) {
+        nameProfile=v.findViewById(R.id.nameProfile);
+        emailProfile=v.findViewById(R.id.emailProfile);
+        phoneProfile=v.findViewById(R.id.phoneProfile);
+        avatarProfile=v.findViewById(R.id.avatarProfile);
+        btnAdd=v.findViewById(R.id.btnAdd);
+        editProfile=v.findViewById(R.id.editProfile);
+
+        fAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
+        userId = fAuth.getCurrentUser().getUid();
+        user = fAuth.getCurrentUser();
+    }
+
+
+}

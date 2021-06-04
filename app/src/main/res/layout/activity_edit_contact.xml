@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginBottom="15dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:padding="8dp"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:gravity="center"
+        android:layout_marginBottom="5dp"
+        android:text="Sửa thông tin liên hệ"/>
+
+    <EditText
+        android:textSize="20dp"
+        android:padding="8dp"
+        android:layout_margin="10dp"
+        android:hint="Name"
+        android:id="@+id/editNameContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <EditText
+        android:textSize="20dp"
+        android:padding="8dp"
+        android:layout_margin="10dp"
+        android:hint="Phone"
+        android:id="@+id/editPhoneContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <EditText
+        android:textSize="20dp"
+        android:padding="8dp"
+        android:layout_margin="10dp"
+        android:hint="Email"
+        android:id="@+id/editEmailContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <EditText
+        android:textSize="20dp"
+        android:padding="8dp"
+        android:layout_margin="10dp"
+        android:hint="Date Of Birth"
+        android:id="@+id/editDateContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <Spinner
+        android:textSize="20dp"
+        android:padding="8dp"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spEditContact"/>
+
+    <Button
+        android:id="@+id/btnUpdateContact"
+        android:padding="8dp"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update Contact"/>
+    <Button
+        android:id="@+id/btnDeleteContact"
+        android:padding="8dp"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Contact"/>
+    <Button
+        android:id="@+id/btnCancelContact"
+        android:padding="8dp"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"/>
+</LinearLayout>
