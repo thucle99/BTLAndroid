@@ -22,7 +22,6 @@
         android:id="@+id/editFullname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
         android:padding="10dp"
         android:layout_margin="20dp"
         android:hint="Fullname"
@@ -31,7 +30,6 @@
         android:id="@+id/editEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
         android:padding="10dp"
         android:layout_margin="20dp"
         android:hint="Email"
@@ -39,7 +37,6 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
         android:padding="10dp"
         android:id="@+id/editPhone"
         android:layout_margin="20dp"

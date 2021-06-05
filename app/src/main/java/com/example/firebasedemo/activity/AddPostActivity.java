@@ -24,12 +24,16 @@ import com.example.firebasedemo.MainActivity;
 import com.example.firebasedemo.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -53,6 +57,8 @@ public class AddPostActivity extends AppCompatActivity {
     private StorageReference mountainsRef;
     private StorageReference mountainImagesRef ;
     private FirebaseStorage storage;
+    private FirebaseAuth fAuth;
+    private FirebaseUser user;
     private ByteArrayOutputStream baos;
     private Bitmap bitmap;
     private Integer TodoNum = new Random().nextInt();
@@ -67,31 +73,6 @@ public class AddPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         initView();
-
-//        imagePicker.setDrawingCacheEnabled(true);
-//        imagePicker.buildDrawingCache();
-//        bitmap=((BitmapDrawable) imagePicker.getDrawable()).getBitmap();
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//        byte[] data = baos.toByteArray();
-//
-//        try {
-//            stream = new FileInputStream(new File("path/to/images/rivers.jpg"));
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        uploadTask = mountainsRef.putBytes(data);
-//        uploadTask.addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull @NotNull Exception e) {
-//
-//            }
-//        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//
-//            }
-//        });
 
         imagePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +117,9 @@ public class AddPostActivity extends AppCompatActivity {
         imagePicker=findViewById(R.id.imagePicker);
         btnPost=findViewById(R.id.btnPost);
 
+        fAuth = FirebaseAuth.getInstance();
+        user = fAuth.getCurrentUser();
+
 //        storage = FirebaseStorage.getInstance();
 //        storageRef = storage.getReference();
 
@@ -145,81 +129,102 @@ public class AddPostActivity extends AppCompatActivity {
 //        baos = new ByteArrayOutputStream();
     }
 
-    private void uploadImage()
-    {
-        if (uri != null) {
+    private void uploadImage() {
+        imagePicker.setDrawingCacheEnabled(true);
+        imagePicker.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) imagePicker.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
 
-            // Code for showing progressDialog while uploading
-            ProgressDialog progressDialog
-                    = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-
-            // Defining the child of storageReference
-            StorageReference ref
-                    = storageRef
-                    .child(
-                            "images/"
-                                    + UUID.randomUUID().toString());
-
-            // adding listeners on upload
-            // or failure of image
-            ref.putFile(uri)
-                    .addOnSuccessListener(
-                            new OnSuccessListener<UploadTask.TaskSnapshot>() {
-
-                                @Override
-                                public void onSuccess(
-                                        UploadTask.TaskSnapshot taskSnapshot)
-                                {
-
-                                    // Image uploaded successfully
-                                    // Dismiss dialog
-                                    progressDialog.dismiss();
-                                    Toast
-                                            .makeText(AddPostActivity.this,
-                                                    "Image Uploaded!!",
-                                                    Toast.LENGTH_SHORT)
-                                            .show();
-                                    Log.d("img", "chao anh em");
-                                    Intent intent = new Intent(AddPostActivity.this,
-                                            FragmentProfile.class);
-                                    startActivity(intent);
-                                }
-                            })
-
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e)
-                        {
-
-                            // Error, Image not uploaded
-                            progressDialog.dismiss();
-                            Toast
-                                    .makeText(AddPostActivity.this,
-                                            "Failed " + e.getMessage(),
-                                            Toast.LENGTH_SHORT)
-                                    .show();
-                        }
-                    })
-                    .addOnProgressListener(
-                            new OnProgressListener<UploadTask.TaskSnapshot>() {
-
-                                // Progress Listener for loading
-                                // percentage on the dialog box
-                                @Override
-                                public void onProgress(
-                                        UploadTask.TaskSnapshot taskSnapshot)
-                                {
-                                    double progress
-                                            = (100.0
-                                            * taskSnapshot.getBytesTransferred()
-                                            / taskSnapshot.getTotalByteCount());
-                                    progressDialog.setMessage(
-                                            "Uploaded "
-                                                    + (int)progress + "%");
-                                }
-                            });
-        }
+        UploadTask uploadTask = mountainImagesRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                Navigation.findNavController(view).navigateUp();
+            }
+        });
     }
+
+//    private void uploadImage()
+//    {
+//        if (uri != null) {
+//
+//            // Code for showing progressDialog while uploading
+//            ProgressDialog progressDialog
+//                    = new ProgressDialog(this);
+//            progressDialog.setTitle("Uploading...");
+//            progressDialog.show();
+//
+//            // Defining the child of storageReference
+//            StorageReference ref
+//                    = storageRef
+//                    .child(
+//                            "images/"
+//                                    + UUID.randomUUID().toString());
+//
+//            // adding listeners on upload
+//            // or failure of image
+//            ref.putFile(uri)
+//                .addOnSuccessListener(
+//                    new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//
+//                        @Override
+//                        public void onSuccess(
+//                                UploadTask.TaskSnapshot taskSnapshot)
+//                        {
+//
+//                            // Image uploaded successfully
+//                            // Dismiss dialog
+//                            progressDialog.dismiss();
+//                            Toast
+//                                    .makeText(AddPostActivity.this,
+//                                            "Image Uploaded!!",
+//                                            Toast.LENGTH_SHORT)
+//                                    .show();
+//                            Log.d("img", "chao anh em");
+//                            Intent intent = new Intent(AddPostActivity.this,
+//                                    FragmentProfile.class);
+//                            startActivity(intent);
+//                        }
+//                    })
+//
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e)
+//                    {
+//                        // Error, Image not uploaded
+//                        progressDialog.dismiss();
+//                        Toast
+//                            .makeText(AddPostActivity.this,
+//                                    "Failed " + e.getMessage(),
+//                                    Toast.LENGTH_SHORT)
+//                            .show();
+//                    }
+//                })
+//                .addOnProgressListener(
+//                    new OnProgressListener<UploadTask.TaskSnapshot>() {
+//
+//                        // Progress Listener for loading
+//                        // percentage on the dialog box
+//                        @Override
+//                        public void onProgress(
+//                                UploadTask.TaskSnapshot taskSnapshot)
+//                        {
+//                            double progress
+//                                    = (100.0
+//                                    * taskSnapshot.getBytesTransferred()
+//                                    / taskSnapshot.getTotalByteCount());
+//                            progressDialog.setMessage(
+//                                    "Uploaded "
+//                                            + (int)progress + "%");
+//                    }
+//                });
+//        }
+//    }
 }

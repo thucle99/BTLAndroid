@@ -1,6 +1,7 @@
 package com.example.firebasedemo;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.example.firebasedemo.activity.AddPostActivity;
 import com.example.firebasedemo.activity.EditProfileActivity;
 import com.example.firebasedemo.adapter.PostAdapter;
 import com.example.firebasedemo.model.getall.MyPost;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -59,6 +62,13 @@ public class FragmentProfile extends Fragment {
 
         View v= inflater.inflate(R.layout.fragment_profile, container, false);
         init(v);
+        StorageReference profileRef = storageReference.child("users/"+fAuth.getCurrentUser().getUid()+"/profile.jpg");
+        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(avatarProfile);
+            }
+        });
 
         DocumentReference documentReference = fStore.collection("users").document(userId);
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -88,7 +98,7 @@ public class FragmentProfile extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(getContext(),EditProfileActivity.class);
+                Intent i = new Intent(v.getContext(),EditProfileActivity.class);
                 i.putExtra("fullName",nameProfile.getText().toString());
                 i.putExtra("email",emailProfile.getText().toString());
                 i.putExtra("phone",phoneProfile.getText().toString());

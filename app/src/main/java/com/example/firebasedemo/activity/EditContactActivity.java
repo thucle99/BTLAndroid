@@ -78,6 +78,7 @@ public class EditContactActivity extends AppCompatActivity {
 
             reference = FirebaseDatabase.getInstance().getReference().child("Contacts").
                     child("contact" + contact.getKey());
+
             btnUpdateContact.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
