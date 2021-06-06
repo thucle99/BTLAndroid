@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,6 +44,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +54,7 @@ import java.util.UUID;
 
 public class AddPostActivity extends AppCompatActivity {
     private EditText edDes;
+    private TextView txtName;
     private ImageView imagePicker,imageAvatar;
     private Button btnPost;
     private DatabaseReference reference;
@@ -87,16 +91,22 @@ public class AddPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 uploadImage();
+                Date date = new Date();
+
+                Calendar cal = Calendar.getInstance();
+                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+                String formatted = format1.format(cal.getTime());
+
                 reference = FirebaseDatabase.getInstance().getReference().
                         child("MyPost").
+                        child(user.getUid()).
                         child("post" + keytodo);
 
                     Map<String, Object> data= new HashMap<>();
                     data.put("describe", edDes.getText().toString());
-                    data.put("date", "25/07/1999");
+                    data.put("date",formatted);
                     data.put("urlImage",keytodo);
                     reference.setValue(data);
-                    finish();
             }
         });
     }
@@ -115,12 +125,14 @@ public class AddPostActivity extends AppCompatActivity {
         imagePicker=findViewById(R.id.imagePicker);
         btnPost=findViewById(R.id.btnPost);
         imageAvatar=findViewById(R.id.imageAvatar);
+        txtName=findViewById(R.id.txtName);
+        Intent intent = getIntent();
+        txtName.setText(intent.getStringExtra("nameProfile"));
 
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
         storageRef = FirebaseStorage.getInstance().getReference();
         mountainsRef = storageRef.child("images/" +user.getUid()+"/" +keytodo+ ".jpg");
-
 
         profileRef = storageRef.child("users/"+user.getUid()+"/profile.jpg");
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -177,81 +189,5 @@ public class AddPostActivity extends AppCompatActivity {
                     }
                 });;
     }
-
-//    private void uploadImage()
-//    {
-//        if (uri != null) {
-//
-//            // Code for showing progressDialog while uploading
-//            ProgressDialog progressDialog
-//                    = new ProgressDialog(this);
-//            progressDialog.setTitle("Uploading...");
-//            progressDialog.show();
-//
-//            // Defining the child of storageReference
-//            StorageReference ref
-//                    = storageRef
-//                    .child(
-//                            "images/"
-//                                    + UUID.randomUUID().toString());
-//
-//            // adding listeners on upload
-//            // or failure of image
-//            ref.putFile(uri)
-//                .addOnSuccessListener(
-//                    new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//
-//                        @Override
-//                        public void onSuccess(
-//                                UploadTask.TaskSnapshot taskSnapshot)
-//                        {
-//
-//                            // Image uploaded successfully
-//                            // Dismiss dialog
-//                            progressDialog.dismiss();
-//                            Toast
-//                                    .makeText(AddPostActivity.this,
-//                                            "Image Uploaded!!",
-//                                            Toast.LENGTH_SHORT)
-//                                    .show();
-//                            Intent intent = new Intent(AddPostActivity.this,
-//                                    FragmentProfile.class);
-//                            startActivity(intent);
-//                        }
-//                    })
-//
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e)
-//                    {
-//                        // Error, Image not uploaded
-//                        progressDialog.dismiss();
-//                        Toast
-//                            .makeText(AddPostActivity.this,
-//                                    "Failed " + e.getMessage(),
-//                                    Toast.LENGTH_SHORT)
-//                            .show();
-//                    }
-//                })
-//                .addOnProgressListener(
-//                    new OnProgressListener<UploadTask.TaskSnapshot>() {
-//
-//                        // Progress Listener for loading
-//                        // percentage on the dialog box
-//                        @Override
-//                        public void onProgress(
-//                                UploadTask.TaskSnapshot taskSnapshot)
-//                        {
-//                            double progress
-//                                    = (100.0
-//                                    * taskSnapshot.getBytesTransferred()
-//                                    / taskSnapshot.getTotalByteCount());
-//                            progressDialog.setMessage(
-//                                    "Uploaded "
-//                                            + (int)progress + "%");
-//                    }
-//                });
-//        }
-//    }
 
 }

@@ -17,8 +17,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.firebasedemo.R;
 import com.example.firebasedemo.model.getall.Contact;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -34,6 +37,8 @@ public class AddContactActivity extends AppCompatActivity {
     private Integer TodoNum = new Random().nextInt();
     private String keytodo = Integer.toString(TodoNum);
     private ProgressBar progressBarContact;
+    private FirebaseAuth fAuth;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,6 +95,7 @@ public class AddContactActivity extends AppCompatActivity {
                 progressBarContact.setVisibility(View.VISIBLE);
                 reference = FirebaseDatabase.getInstance().getReference().
                         child("Contacts").
+                        child(user.getUid()).
                         child("contact" + keytodo);
                 Map<String, Object> data= new HashMap<>();
                 data.put("name", nameContact.getText().toString());
@@ -122,5 +128,8 @@ public class AddContactActivity extends AppCompatActivity {
         sp=findViewById(R.id.sp);
         btnAddContact=findViewById(R.id.btnAddContact);
         progressBarContact = findViewById(R.id.progressBarContact);
+
+        fAuth = FirebaseAuth.getInstance();
+        user = fAuth.getCurrentUser();
     }
 }

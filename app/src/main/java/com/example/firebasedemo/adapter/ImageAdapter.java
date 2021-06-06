@@ -1,11 +1,13 @@
 package com.example.firebasedemo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.firebasedemo.R;
+import com.example.firebasedemo.activity.AddPostActivity;
+import com.example.firebasedemo.activity.ImageProfileActivity;
 import com.example.firebasedemo.model.getall.Welcome;
 
 import org.jetbrains.annotations.NotNull;
@@ -51,34 +55,44 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     public class ImageViewHolder extends RecyclerView.ViewHolder{
         ImageView imageView;
-        ImageView imageAvatar;
+        ImageView itemImageAvatar;
         TextView textUser,textDate,textDes,textLike;
+        LinearLayout profileInformation;
         public ImageViewHolder(@NonNull @NotNull View itemview) {
             super(itemview);
             imageView = itemview.findViewById(R.id.item_photo);
-            imageAvatar = itemview.findViewById(R.id.imageAvatar);
+            itemImageAvatar = itemview.findViewById(R.id.itemImageAvatar);
             textUser = itemview.findViewById(R.id.txtName);
             textLike=itemview.findViewById(R.id.textLike);
-//            textDate = itemView.findViewById(R.id.textDate);
+            textDate = itemView.findViewById(R.id.txtDate);
             textDes = itemView.findViewById(R.id.txtDes);
+            profileInformation=itemview.findViewById(R.id.profileInformation);
         }
         public void bind(Welcome welcome){
 
             textUser.setText(welcome.getUser().getName());
-//            textDate.setText(welcome.getUpdatedAt().toString());
+            textDate.setText(welcome.getCreated_at().substring(0,10));
             textDes.setText(welcome.getAlt_description());
             textLike.setText(String.valueOf(welcome.getLikes()));
-//            Log.d("url", String.valueOf(welcome.));
             Glide
-                    .with(mContext)
-                    .load(welcome.getUrls().getSmall())
-                    .centerCrop()
-                    .into(imageView);
+            .with(mContext)
+            .load(welcome.getUrls().getSmall())
+            .centerCrop()
+            .into(imageView);
             Glide
-                    .with(mContext)
-                    .load(welcome.getUser().getProfile_image().getLarge())
-                    .centerCrop()
-                    .into(imageAvatar);
+            .with(mContext)
+            .load(welcome.getUser().getProfile_image().getLarge())
+            .centerCrop()
+            .into(itemImageAvatar);
+
+            profileInformation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext,
+                            ImageProfileActivity.class);
+                    mContext.startActivity(intent);
+                }
+            });
         }
     }
 }

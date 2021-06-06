@@ -57,7 +57,6 @@ public class FragmentProfile extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private String userId;
-    private FirebaseUser user;
     private StorageReference storageReference;
 
     private RecyclerView recycleProfile;
@@ -69,11 +68,12 @@ public class FragmentProfile extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         View v= inflater.inflate(R.layout.fragment_profile, container, false);
+        init(v);
 
         recycleProfile=v.findViewById(R.id.recycleProfile);
         recycleProfile.setLayoutManager(new LinearLayoutManager(getContext()));
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference().child("MyPost");
+        myRef = database.getReference().child("MyPost").child(fAuth.getCurrentUser().getUid());
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -96,7 +96,6 @@ public class FragmentProfile extends Fragment {
             }
         });
 
-        init(v);
 
         StorageReference profileRef = storageReference.child("users/"+fAuth.getCurrentUser().getUid()+"/profile.jpg");
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -127,6 +126,7 @@ public class FragmentProfile extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(),
                         AddPostActivity.class);
+                intent.putExtra("nameProfile",nameProfile.getText().toString());
                 startActivity(intent);
             }
         });
@@ -160,7 +160,6 @@ public class FragmentProfile extends Fragment {
         fStore = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         userId = fAuth.getCurrentUser().getUid();
-        user = fAuth.getCurrentUser();
     }
 
 

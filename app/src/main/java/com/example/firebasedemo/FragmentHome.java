@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -29,19 +30,21 @@ public class FragmentHome extends Fragment {
     private RecyclerView recyclerView;
     private ImageAdapter imageAdapter;
     private ProgressBar progressBarLoadingHome;
+    private LinearLayout profileInformation;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
         imageAdapter = new ImageAdapter(getContext());
+        profileInformation=view.findViewById(R.id.profileInformation);
         progressBarLoadingHome=view.findViewById(R.id.progressBarLoadingHome);
         progressBarLoadingHome.setVisibility(View.VISIBLE);
         recyclerView = view.findViewById(R.id.recycleHome);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
 //      dữ liệu ảnh trên mộ hàng,  chiều rộng bằng nhau, chiều dài co dãn
 
-//        callService();
+        callService();
         return view;
     }
     private void callService() {
