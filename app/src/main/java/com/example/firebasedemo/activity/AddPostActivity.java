@@ -43,6 +43,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -50,23 +51,22 @@ import java.util.UUID;
 
 public class AddPostActivity extends AppCompatActivity {
     private EditText edDes;
-    private ImageView imagePicker;
+    private ImageView imagePicker,imageAvatar;
     private Button btnPost;
     private DatabaseReference reference;
     private StorageReference storageRef;
     private StorageReference mountainsRef;
-    private StorageReference mountainImagesRef ;
-    private FirebaseStorage storage;
+    private StorageReference profileRef ;
     private FirebaseAuth fAuth;
     private FirebaseUser user;
-    private ByteArrayOutputStream baos;
     private Bitmap bitmap;
     private Integer TodoNum = new Random().nextInt();
     private String keytodo = Integer.toString(TodoNum);
-    private UploadTask uploadTask;
-    private InputStream stream;
     private static final int RESULT_LOAD_IMG = 538;
     private Uri uri;
+
+    public AddPostActivity() {
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,19 +86,17 @@ public class AddPostActivity extends AppCompatActivity {
         btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                reference = FirebaseDatabase.getInstance().getReference().
-//                        child("MyPost").
-//                        child("post" + keytodo);
-//
-//                    Map<String, Object> data= new HashMap<>();
-//                    data.put("name", "Le Trung Thuc");
-//                    data.put("describe", edDes.getText().toString());
-//                    data.put("date", "25/07/1999");
-//                    data.put("key", keytodo);
-//
-//                    reference.setValue(data);
-//                    finish();
                 uploadImage();
+                reference = FirebaseDatabase.getInstance().getReference().
+                        child("MyPost").
+                        child("post" + keytodo);
+
+                    Map<String, Object> data= new HashMap<>();
+                    data.put("describe", edDes.getText().toString());
+                    data.put("date", "25/07/1999");
+                    data.put("urlImage",keytodo);
+                    reference.setValue(data);
+                    finish();
             }
         });
     }
@@ -116,20 +114,29 @@ public class AddPostActivity extends AppCompatActivity {
         edDes=findViewById(R.id.edDes);
         imagePicker=findViewById(R.id.imagePicker);
         btnPost=findViewById(R.id.btnPost);
+        imageAvatar=findViewById(R.id.imageAvatar);
 
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
+        storageRef = FirebaseStorage.getInstance().getReference();
+        mountainsRef = storageRef.child("images/" +user.getUid()+"/" +keytodo+ ".jpg");
 
-//        storage = FirebaseStorage.getInstance();
-//        storageRef = storage.getReference();
 
-
-//        mountainsRef = storageRef.child("mountains.jpg");
-//        mountainImagesRef = storageRef.child("images/mountains.jpg");
-//        baos = new ByteArrayOutputStream();
+        profileRef = storageRef.child("users/"+user.getUid()+"/profile.jpg");
+        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(imageAvatar);
+            }
+        });
     }
 
     private void uploadImage() {
+        ProgressDialog progressDialog
+                = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading...");
+        progressDialog.show();
+
         imagePicker.setDrawingCacheEnabled(true);
         imagePicker.buildDrawingCache();
         Bitmap bitmap = ((BitmapDrawable) imagePicker.getDrawable()).getBitmap();
@@ -137,18 +144,38 @@ public class AddPostActivity extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
-        UploadTask uploadTask = mountainImagesRef.putBytes(data);
+        UploadTask uploadTask = mountainsRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(AddPostActivity.this, "Image Upload fail!!", Toast.LENGTH_SHORT).show();
+                finish();
                 // Handle unsuccessful uploads
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                Navigation.findNavController(view).navigateUp();
+                Toast.makeText(AddPostActivity.this, "Image Uploaded!!", Toast.LENGTH_SHORT).show();
+                finish();
             }
-        });
+        }).addOnProgressListener(
+                new OnProgressListener<UploadTask.TaskSnapshot>() {
+
+                    // Progress Listener for loading
+                    // percentage on the dialog box
+                    @Override
+                    public void onProgress(
+                            UploadTask.TaskSnapshot taskSnapshot)
+                    {
+                        double progress
+                                = (100.0
+                                * taskSnapshot.getBytesTransferred()
+                                / taskSnapshot.getTotalByteCount());
+                        progressDialog.setMessage(
+                                "Uploaded "
+                                        + (int)progress + "%");
+                    }
+                });;
     }
 
 //    private void uploadImage()
@@ -187,7 +214,6 @@ public class AddPostActivity extends AppCompatActivity {
 //                                            "Image Uploaded!!",
 //                                            Toast.LENGTH_SHORT)
 //                                    .show();
-//                            Log.d("img", "chao anh em");
 //                            Intent intent = new Intent(AddPostActivity.this,
 //                                    FragmentProfile.class);
 //                            startActivity(intent);
@@ -227,4 +253,5 @@ public class AddPostActivity extends AppCompatActivity {
 //                });
 //        }
 //    }
+
 }

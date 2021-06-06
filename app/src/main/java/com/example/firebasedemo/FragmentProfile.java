@@ -15,18 +15,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firebasedemo.activity.AddContactActivity;
 import com.example.firebasedemo.activity.AddPostActivity;
 import com.example.firebasedemo.activity.EditProfileActivity;
+import com.example.firebasedemo.adapter.ContactAdapter;
 import com.example.firebasedemo.adapter.PostAdapter;
+import com.example.firebasedemo.model.getall.Contact;
 import com.example.firebasedemo.model.getall.MyPost;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -38,21 +44,23 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentProfile extends Fragment {
     private Button btnAdd;
     private TextView nameProfile,emailProfile,phoneProfile;
     private LinearLayout editProfile;
-    private ImageView avatarProfile;
+    private ImageView avatarProfile,avatar;
     private FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
+    private FirebaseDatabase database;
     private DatabaseReference myRef;
     private String userId;
     private FirebaseUser user;
     private StorageReference storageReference;
 
-    private RecyclerView recycleHome;
+    private RecyclerView recycleProfile;
     List<MyPost> myPosts;
     private PostAdapter adapter;
 
@@ -61,12 +69,41 @@ public class FragmentProfile extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         View v= inflater.inflate(R.layout.fragment_profile, container, false);
+
+        recycleProfile=v.findViewById(R.id.recycleProfile);
+        recycleProfile.setLayoutManager(new LinearLayoutManager(getContext()));
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference().child("MyPost");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                myPosts = new ArrayList<MyPost>();
+                for(DataSnapshot item: snapshot.getChildren())
+                {
+                    MyPost myPost = item.getValue(MyPost.class);
+                    myPosts.add(myPost);
+                }
+                adapter = new PostAdapter(getContext(),
+                        myPosts,nameProfile.getText().toString());
+                recycleProfile.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         init(v);
+
         StorageReference profileRef = storageReference.child("users/"+fAuth.getCurrentUser().getUid()+"/profile.jpg");
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Picasso.get().load(uri).into(avatarProfile);
+                Picasso.get().load(uri).into(avatar);
             }
         });
 
@@ -115,6 +152,7 @@ public class FragmentProfile extends Fragment {
         emailProfile=v.findViewById(R.id.emailProfile);
         phoneProfile=v.findViewById(R.id.phoneProfile);
         avatarProfile=v.findViewById(R.id.avatarProfile);
+        avatar=v.findViewById(R.id.avatar);
         btnAdd=v.findViewById(R.id.btnAdd);
         editProfile=v.findViewById(R.id.editProfile);
 
