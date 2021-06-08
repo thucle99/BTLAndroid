@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.firebasedemo.MainActivity;
 import com.example.firebasedemo.R;
 import com.example.firebasedemo.activity.AddPostActivity;
 import com.example.firebasedemo.activity.ImageProfileActivity;
@@ -40,7 +41,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     @org.jetbrains.annotations.NotNull
     @Override
     public ImageAdapter.ImageViewHolder onCreateViewHolder(@NonNull @org.jetbrains.annotations.NotNull ViewGroup parent, int viewType) {
-        return new ImageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false));
+        return new ImageViewHolder(LayoutInflater.
+                from(parent.getContext()).inflate(R.layout.item_post, parent, false));
     }
 
     @Override
@@ -58,15 +60,15 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         ImageView itemImageAvatar;
         TextView textUser,textDate,textDes,textLike;
         LinearLayout profileInformation;
-        public ImageViewHolder(@NonNull @NotNull View itemview) {
-            super(itemview);
-            imageView = itemview.findViewById(R.id.item_photo);
-            itemImageAvatar = itemview.findViewById(R.id.itemImageAvatar);
-            textUser = itemview.findViewById(R.id.txtName);
-            textLike=itemview.findViewById(R.id.textLike);
+        public ImageViewHolder(@NonNull @NotNull View itemView) {
+            super(itemView);
+            imageView = itemView.findViewById(R.id.item_photo);
+            itemImageAvatar = itemView.findViewById(R.id.itemImageAvatar);
+            textUser = itemView.findViewById(R.id.txtName);
+            textLike=itemView.findViewById(R.id.textLike);
             textDate = itemView.findViewById(R.id.txtDate);
             textDes = itemView.findViewById(R.id.txtDes);
-            profileInformation=itemview.findViewById(R.id.profileInformation);
+            profileInformation=itemView.findViewById(R.id.profileInformation);
         }
         public void bind(Welcome welcome){
 
@@ -90,6 +92,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext,
                             ImageProfileActivity.class);
+                    intent.putExtra("username",welcome.getUser().getUsername());
                     mContext.startActivity(intent);
                 }
             });

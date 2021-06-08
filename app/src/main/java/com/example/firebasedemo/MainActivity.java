@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.firebasedemo.activity.LoginActivity;
 import com.example.firebasedemo.model.getall.Welcome;
 import com.example.firebasedemo.service.ImageService;
 
@@ -83,10 +84,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.search,menu);
-        MenuItem item = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        inflater.inflate(R.menu.top_menu,menu);
+//        MenuItem item = menu.findItem(R.id.search);
+//        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.exit:{
+                System.exit(0);
+                break;
+            }
+            case R.id.logOut:{
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
