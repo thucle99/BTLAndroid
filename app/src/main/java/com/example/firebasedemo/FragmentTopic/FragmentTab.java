@@ -32,7 +32,6 @@ public class FragmentTab extends Fragment {
 
     public FragmentTab(String idTopic){
         this.idTopic=idTopic;
-
     }
 
     @Nullable
@@ -70,6 +69,5 @@ public class FragmentTab extends Fragment {
         imageAdapter.setListImage(welcomes);
         recyclerView.setAdapter(imageAdapter);
         progressBarLoadingHome.setVisibility(View.GONE);
-
     }
 }

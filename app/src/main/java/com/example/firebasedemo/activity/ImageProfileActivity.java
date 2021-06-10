@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.example.firebasedemo.R;
 import com.example.firebasedemo.adapter.ImageAdapter;
 import com.example.firebasedemo.adapter.ImageProfileAdapter;
-import com.example.firebasedemo.model.getall.Welcome;
 import com.example.firebasedemo.model.user.WelcomeUser;
+import com.example.firebasedemo.service.ImageProfileService;
 import com.example.firebasedemo.service.ImageService;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -38,7 +38,8 @@ public class ImageProfileActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_profile);
-//        initView();
+        initView();
+        callService();
     }
 
     private void initView() {
@@ -49,22 +50,30 @@ public class ImageProfileActivity extends AppCompatActivity {
         recycleImageProfile.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
     }
 
-//    private void callService() {
-//        Observable<List<Welcome>> cryptoObservable = ImageService.createService().
-//                getRandomImagesWithTopic(idTopic,1, ImageService.clientId);
-//
-//        cryptoObservable.subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(this::handleResults, this::handleError);
-//        // xư lý bất đồng bộ, khi get data sẽ xử lý trên một luồng it riêng,
-//        // k ảnh hg đến luồng chính
-//    }
+    private void callService() {
+        Intent intent = getIntent();
+        String username=intent.getStringExtra("username");
+        Log.d("usernameA",username);
+
+        Observable<WelcomeUser> cryptoObservable = ImageProfileService.createService().
+                getImagesWithUsername(username, ImageProfileService.clientId);
+
+        cryptoObservable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::handleResults, this::handleError);
+        // xư lý bất đồng bộ, khi get data sẽ xử lý trên một luồng it riêng,
+        // k ảnh hg đến luồng chính
+    }
     private void handleError(Throwable throwable) {
-        Log.d("AppLog",throwable.toString());
+        Log.d("AppLogErr",throwable.toString());
     }
 
-    private void handleResults(List<WelcomeUser> welcomeUsers) {
-        adapter.setListImage(welcomeUsers);
+    private void handleResults(WelcomeUser welcomeUsers) {
+//        Log.d("sizeA",welcomeUsers.size()+"chaoA abc");
+        String location=welcomeUsers.getLocation();
+        String name=welcomeUsers.getName();
+        adapter.setListImage(welcomeUsers.getTags().getCustom(),location,name);
+//        Log.d("sizeB",welcomeUsers.size()+"chao abc");
         recycleImageProfile.setAdapter(adapter);
         progressBarImageProfile.setVisibility(View.GONE);
 

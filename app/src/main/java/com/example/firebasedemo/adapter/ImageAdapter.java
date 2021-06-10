@@ -34,7 +34,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     public void setListImage(List<Welcome> listImage) {
         this.listImage = listImage;
-        Log.d("AppLog",listImage.size()+"");
+//        Log.d("AppLog",listImage.size()+"");
     }
 
     @NonNull
