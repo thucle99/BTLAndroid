@@ -12,12 +12,13 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ImageService {
 //    String str = "https://api.unsplash.com/topics/towJZFskpGg/photos?page=1&client_id=-H5uie2gFTUpwfhVJlIcqPodocHCNTQvsx3zRrgYbB4"
     static final String imageUrl  = "https://api.unsplash.com/";
-    static final String clientId = "-H5uie2gFTUpwfhVJlIcqPodocHCNTQvsx3zRrgYbB4";
+    static final String clientId = "33YwfB05fCHfEo45vE19VPQ4IsnDj8FOysZplsVYr1w";
     static ImageService createService(){
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -30,7 +31,9 @@ public interface ImageService {
         return retrofit.create(ImageService.class);
         // trả về retrofit(http request)
     }
-    @GET("topics/towJZFskpGg/photos?")
-    Observable<List<Welcome>> getRandomImages(@Query("page") int page, @Query("client_id") String clientId);
+//    @GET("topics/towJZFskpGg/photos?")
+//    Observable<List<Welcome>> getRandomImages(@Query("page") int page, @Query("client_id") String clientId);
+    @GET("topics/{id}/photos?")
+    Observable<List<Welcome>> getRandomImagesWithTopic(@Path("id") String id, @Query("page") int page, @Query("client_id") String clientId);
 
 }

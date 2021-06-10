@@ -1,11 +1,12 @@
 package com.example.firebasedemo.adapter;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,14 +30,14 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     public void setListImage(List<Welcome> listImage) {
         this.listImage = listImage;
-        Log.d("AppLog",listImage.size()+"");
     }
 
     @NonNull
     @org.jetbrains.annotations.NotNull
     @Override
     public ImageAdapter.ImageViewHolder onCreateViewHolder(@NonNull @org.jetbrains.annotations.NotNull ViewGroup parent, int viewType) {
-        return new ImageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false));
+        return new ImageViewHolder(LayoutInflater.
+                from(parent.getContext()).inflate(R.layout.item_post, parent, false));
     }
 
     @Override
@@ -51,34 +52,35 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     public class ImageViewHolder extends RecyclerView.ViewHolder{
         ImageView imageView;
-        ImageView imageAvatar;
+        ImageView itemImageAvatar;
         TextView textUser,textDate,textDes,textLike;
-        public ImageViewHolder(@NonNull @NotNull View itemview) {
-            super(itemview);
-            imageView = itemview.findViewById(R.id.item_photo);
-            imageAvatar = itemview.findViewById(R.id.imageAvatar);
-            textUser = itemview.findViewById(R.id.txtName);
-            textLike=itemview.findViewById(R.id.textLike);
-//            textDate = itemView.findViewById(R.id.textDate);
+        LinearLayout profileInformation;
+        public ImageViewHolder(@NonNull @NotNull View itemView) {
+            super(itemView);
+            imageView = itemView.findViewById(R.id.item_photo);
+            itemImageAvatar = itemView.findViewById(R.id.itemImageAvatar);
+            textUser = itemView.findViewById(R.id.txtName);
+            textLike=itemView.findViewById(R.id.textLike);
+            textDate = itemView.findViewById(R.id.txtDate);
             textDes = itemView.findViewById(R.id.txtDes);
+            profileInformation=itemView.findViewById(R.id.profileInformation);
         }
         public void bind(Welcome welcome){
 
             textUser.setText(welcome.getUser().getName());
-//            textDate.setText(welcome.getUpdatedAt().toString());
+            textDate.setText(welcome.getCreated_at().substring(0,10));
             textDes.setText(welcome.getAlt_description());
             textLike.setText(String.valueOf(welcome.getLikes()));
-//            Log.d("url", String.valueOf(welcome.));
             Glide
-                    .with(mContext)
-                    .load(welcome.getUrls().getSmall())
-                    .centerCrop()
-                    .into(imageView);
+            .with(mContext)
+            .load(welcome.getUrls().getSmall())
+            .centerCrop()
+            .into(imageView);
             Glide
-                    .with(mContext)
-                    .load(welcome.getUser().getProfile_image().getLarge())
-                    .centerCrop()
-                    .into(imageAvatar);
+            .with(mContext)
+            .load(welcome.getUser().getProfile_image().getLarge())
+            .centerCrop()
+            .into(itemImageAvatar);
         }
     }
 }

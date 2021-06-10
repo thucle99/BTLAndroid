@@ -17,6 +17,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/profileInformation"
                 android:paddingTop="15dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
@@ -29,7 +30,7 @@
                     app:cardCornerRadius="50dp">
 
                     <ImageView
-                        android:id="@+id/imageAvatar"
+                        android:id="@+id/itemImageAvatar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:src="@drawable/ic_launcher_background" />
@@ -76,7 +77,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/login" />
+                android:src="@drawable/ic_launcher_foreground" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,7 +96,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingRight="15dp"
-                    android:text="233"
+                    android:text="0"
                     android:textSize="20dp" />
             </LinearLayout>
         </LinearLayout>

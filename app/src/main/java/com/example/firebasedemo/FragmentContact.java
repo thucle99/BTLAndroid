@@ -18,6 +18,8 @@ import com.example.firebasedemo.activity.AddContactActivity;
 import com.example.firebasedemo.adapter.ContactAdapter;
 import com.example.firebasedemo.model.getall.Contact;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +37,7 @@ public class FragmentContact extends Fragment {
     private List<Contact> contacts;
     private ContactAdapter adapter;
     private ProgressBar progressBarLoadingContact;
+    private FirebaseAuth fAuth;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -45,9 +48,10 @@ public class FragmentContact extends Fragment {
         progressBarLoadingContact.setVisibility(View.VISIBLE);
         recycleContact=v.findViewById(R.id.recycleContact);
 
+        fAuth = FirebaseAuth.getInstance();
         recycleContact.setLayoutManager(new LinearLayoutManager(getContext()));
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference().child("Contacts");
+        myRef = database.getReference().child("Contacts").child(fAuth.getCurrentUser().getUid());
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override

@@ -5,17 +5,16 @@ import android.net.Uri;
 import java.io.Serializable;
 
 public class MyPost implements Serializable {
-    private String name,date,describe;
-    private Uri uri;
+    private String name,date,describe,urlImage;
 
     public MyPost() {
     }
 
-    public MyPost(String name, String date, String describe, Uri uri) {
+    public MyPost(String name, String date, String describe, String urlImage) {
         this.name = name;
         this.date = date;
         this.describe = describe;
-        this.uri = uri;
+        this.urlImage = urlImage;
     }
 
     public String getName() {
@@ -42,11 +41,11 @@ public class MyPost implements Serializable {
         this.describe = describe;
     }
 
-    public Uri getUri() {
-        return uri;
+    public String getUrlImage() {
+        return urlImage;
     }
 
-    public void setUri(Uri uri) {
-        this.uri = uri;
+    public void setUrlImage(String urlImage) {
+        this.urlImage = urlImage;
     }
 }

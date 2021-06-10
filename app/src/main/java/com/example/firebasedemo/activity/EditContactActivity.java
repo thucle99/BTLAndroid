@@ -1,4 +1,4 @@
-package com.example.firebasedemo.activity;
+ package com.example.firebasedemo.activity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -21,6 +21,7 @@ import com.example.firebasedemo.R;
 import com.example.firebasedemo.model.getall.Contact;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -33,6 +34,7 @@ public class EditContactActivity extends AppCompatActivity {
     private Spinner spEditContact;
     private String[] cities;
     private DatabaseReference reference;
+    private FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +79,9 @@ public class EditContactActivity extends AppCompatActivity {
             editDateContact.setText(contact.getDate());
 
             reference = FirebaseDatabase.getInstance().getReference().child("Contacts").
+                    child(fAuth.getCurrentUser().getUid()).
                     child("contact" + contact.getKey());
+
             btnUpdateContact.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -145,5 +149,7 @@ public class EditContactActivity extends AppCompatActivity {
         btnUpdateContact = findViewById(R.id.btnUpdateContact);
         btnCancelContact = findViewById(R.id.btnCancelContact);
         btnDeleteContact = findViewById(R.id.btnDeleteContact);
+
+        fAuth = FirebaseAuth.getInstance();
     }
 }

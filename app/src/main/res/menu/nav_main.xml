@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/topic1"
+        android:title="Nature"/>
+    <item android:id="@+id/topic2"
+        android:title="People"/>
+    <item android:id="@+id/topic3"
+        android:title="Fashion"/>
+    <item android:id="@+id/topic4"
+        android:title="Film"/>
+</menu>
