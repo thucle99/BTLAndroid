@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.example.firebasedemo.R;
 import com.example.firebasedemo.adapter.ImageAdapter;
 import com.example.firebasedemo.adapter.ImageProfileAdapter;
+import com.example.firebasedemo.model.getall.Welcome;
 import com.example.firebasedemo.model.user.WelcomeUser;
 import com.example.firebasedemo.service.ImageProfileService;
 import com.example.firebasedemo.service.ImageService;
@@ -31,6 +32,7 @@ public class ImageProfileActivity extends AppCompatActivity {
     private LinearLayout profileInformation;
     private RecyclerView recycleImageProfile;
     private ImageProfileAdapter adapter;
+    private ImageAdapter imageAdapter;
     private ProgressBar progressBarImageProfile;
 
 
@@ -55,8 +57,8 @@ public class ImageProfileActivity extends AppCompatActivity {
         String username=intent.getStringExtra("username");
         Log.d("usernameA",username);
 
-        Observable<WelcomeUser> cryptoObservable = ImageProfileService.createService().
-                getImagesWithUsername(username, ImageProfileService.clientId);
+        Observable<List<Welcome>> cryptoObservable = ImageProfileService.createService().
+                getImagesWithUsername(username, ImageProfileService.clientId,0);
 
         cryptoObservable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -68,13 +70,11 @@ public class ImageProfileActivity extends AppCompatActivity {
         Log.d("AppLogErr",throwable.toString());
     }
 
-    private void handleResults(WelcomeUser welcomeUsers) {
-//        Log.d("sizeA",welcomeUsers.size()+"chaoA abc");
-        String location=welcomeUsers.getLocation();
-        String name=welcomeUsers.getName();
-        adapter.setListImage(welcomeUsers.getTags().getCustom(),location,name);
-//        Log.d("sizeB",welcomeUsers.size()+"chao abc");
-        recycleImageProfile.setAdapter(adapter);
+    private void handleResults(List<Welcome> welcomes) {
+//        adapter.setListImage(welcomes);
+//        recycleImageProfile.setAdapter(imageAdapter);
+        imageAdapter.setListImage(welcomes);
+        recycleImageProfile.setAdapter(imageAdapter);
         progressBarImageProfile.setVisibility(View.GONE);
 
     }

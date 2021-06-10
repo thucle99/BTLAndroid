@@ -26,20 +26,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImageProfileAdapter extends RecyclerView.Adapter<ImageProfileAdapter.ViewHolder>{
-    private List<WelcomeUser> welcomeUsers = new ArrayList<>();
-    private List<Custom> customs= new ArrayList<>();
-    private String locationString;
-    private String nameString;
+    private List<Welcome> welcomes = new ArrayList<>();
     private Context mContext;
+    private ImageAdapter adapter;
     public ImageProfileAdapter(Context context) {
         this.mContext = context;
     }
 
-    public void setListImage(List<Custom> customs,String locationString,String nameString) {
-        Log.d("sizeM",customs.size()+"chao abc");
-        this.customs = customs;
-        this.locationString=locationString;
-        this.nameString=nameString;
+    public void setListImage(List<Welcome> welcomes) {
+        Log.d("sizeM",welcomes.size()+"chao abc");
+        this.welcomes = welcomes;
     }
 
     @NonNull
@@ -47,51 +43,61 @@ public class ImageProfileAdapter extends RecyclerView.Adapter<ImageProfileAdapte
     @Override
     public ImageProfileAdapter.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.
-                from(parent.getContext()).inflate(R.layout.activity_image_profile,parent,true) );
+                from(parent.getContext()).inflate(R.layout.activity_image_profile,parent,false) );
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ImageProfileAdapter.ViewHolder holder, int position) {
-        holder.bind(customs.get(position));
+        holder.bind(welcomes.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return welcomeUsers.size();
+        return welcomes.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         ImageView itemImageAvatar;
         TextView textUser,textDate,textDes,textLike,location,nameImageProfile;
+        RecyclerView recycleImageProfile;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.item_photo);
-            itemImageAvatar = itemView.findViewById(R.id.itemImageAvatar);
-            textUser = itemView.findViewById(R.id.txtName);
-            textLike=itemView.findViewById(R.id.textLike);
-            textDate = itemView.findViewById(R.id.txtDate);
-            textDes = itemView.findViewById(R.id.txtDes);
-            location = itemView.findViewById(R.id.location);
-            nameImageProfile = itemView.findViewById(R.id.nameImageProfile);
+            adapter = new ImageAdapter(mContext);
+            recycleImageProfile=itemView.findViewById(R.id.recycleImageProfile);
+
+            adapter.setListImage(welcomes);
+            recycleImageProfile.setAdapter(adapter);
+//            imageView = itemView.findViewById(R.id.item_photo);
+//            itemImageAvatar = itemView.findViewById(R.id.itemImageAvatar);
+//            textUser = itemView.findViewById(R.id.txtName);
+//            textLike=itemView.findViewById(R.id.textLike);
+//            textDate = itemView.findViewById(R.id.txtDate);
+//            textDes = itemView.findViewById(R.id.txtDes);
+//            location = itemView.findViewById(R.id.location);
+//            nameImageProfile = itemView.findViewById(R.id.nameImageProfile);
         }
 
-        public void bind(Custom customs){
+        public void bind(Welcome welcome){
+//            adapter.setListImage(welcomes);
+//            recycleImageProfile.setAdapter(adapter);
 
-//            textUser.setText(welcomeUser.getName());
-            location.setText(locationString);
-            nameImageProfile.setText(nameString);
-            textDate.setText(customs.getSource().getCover_photo().getCreated_at());
-            textDes.setText(customs.getSource().getCover_photo().getDescription());
-//            textLike.setText(String.valueOf(welcomeUser.getLikes()));
-            Glide
-                    .with(mContext)
-                    .load(customs.getSource().getCover_photo().getUrls().getSmall())
-                    .centerCrop()
-                    .into(imageView);
+//            textUser.setText(welcomes.getName());
+//            textDate.setText(welcomes.getP);
+//            textDes.setText(welcomes.getAlt_description());
+//            textLike.setText(String.valueOf(welcomes.getLikes()));
+//            textUser.setText(welcome.getUser().getName());
+//            textDate.setText(welcome.getCreated_at().substring(0,10));
+//            textDes.setText(welcome.getAlt_description());
+//            textLike.setText(String.valueOf(welcome.getLikes()));
 //            Glide
 //                    .with(mContext)
-//                    .load(welcomeUser.getUser().getProfile_image().getLarge())
+//                    .load(welcome.getUrls().getSmall())
+//                    .centerCrop()
+//                    .into(imageView);
+//            Glide
+//                    .with(mContext)
+//                    .load(welcome.getUser().getProfile_image().getLarge())
 //                    .centerCrop()
 //                    .into(itemImageAvatar);
         }

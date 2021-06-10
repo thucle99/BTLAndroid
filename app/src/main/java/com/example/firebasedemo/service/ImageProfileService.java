@@ -16,7 +16,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ImageProfileService {
-    //    String str = "https://api.unsplash.com/users/julesmarchioni67?client_id=fuOu4odHIMZNCseveRF1qVtYgBE19N5Yt9ET01QehZk"
+    //  https://api.unsplash.com/users/julesmarchioni67/photos?client_id=fuOu4odHIMZNCseveRF1qVtYgBE19N5Yt9ET01QehZk&page=1
     static final String imageUrl  = "https://api.unsplash.com/";
     static final String clientId = "33YwfB05fCHfEo45vE19VPQ4IsnDj8FOysZplsVYr1w";
     static ImageProfileService createService(){
@@ -33,7 +33,8 @@ public interface ImageProfileService {
     }
     //    @GET("topics/towJZFskpGg/photos?")
 //    Observable<List<Welcome>> getRandomImages(@Query("page") int page, @Query("client_id") String clientId);
-    @GET("users/{username}")
-    Observable<WelcomeUser> getImagesWithUsername(@Path("username") String username, @Query("client_id") String clientId);
+    @GET("users/{username}/photos?")
+    Observable<List<Welcome>> getImagesWithUsername(@Path("username") String username,
+                                                    @Query("client_id") String clientId,@Query("page") int page);
 
 }
