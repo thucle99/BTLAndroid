@@ -2,7 +2,6 @@ package com.example.firebasedemo.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.firebasedemo.MainActivity;
 import com.example.firebasedemo.R;
-import com.example.firebasedemo.activity.AddPostActivity;
-import com.example.firebasedemo.activity.ImageProfileActivity;
 import com.example.firebasedemo.model.getall.Welcome;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +30,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     public void setListImage(List<Welcome> listImage) {
         this.listImage = listImage;
-//        Log.d("AppLog",listImage.size()+"");
     }
 
     @NonNull
@@ -86,16 +81,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             .load(welcome.getUser().getProfile_image().getLarge())
             .centerCrop()
             .into(itemImageAvatar);
-
-            profileInformation.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext,
-                            ImageProfileActivity.class);
-                    intent.putExtra("username",welcome.getUser().getUsername());
-                    mContext.startActivity(intent);
-                }
-            });
         }
     }
 }
