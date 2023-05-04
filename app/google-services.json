@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "313201334770",
-    "project_id": "android-b9553",
-    "storage_bucket": "android-b9553.appspot.com"
+    "project_number": "1008174481809",
+    "project_id": "socialapp-28c6a",
+    "storage_bucket": "socialapp-28c6a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:313201334770:android:4d4a325de6f04ed065f36b",
+        "mobilesdk_app_id": "1:1008174481809:android:e1ee9b4111a9aedc545a30",
         "android_client_info": {
           "package_name": "com.example.firebasedemo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "313201334770-a67mati2gcim1qmpancrl0qtor5gnlnl.apps.googleusercontent.com",
+          "client_id": "1008174481809-g7nqa2r1tta1sucv8524dc3c20hn22vf.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA7eVU_6F41d0jVy7RZd2Ppcc6h873CpVg"
+          "current_key": "AIzaSyBNn-HWHoInBFbGzqOyflWXFP7fVTZ4OJk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "313201334770-a67mati2gcim1qmpancrl0qtor5gnlnl.apps.googleusercontent.com",
+              "client_id": "1008174481809-g7nqa2r1tta1sucv8524dc3c20hn22vf.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
