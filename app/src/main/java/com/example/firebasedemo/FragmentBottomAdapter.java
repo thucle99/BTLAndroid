@@ -18,8 +18,6 @@ public class FragmentBottomAdapter extends FragmentStatePagerAdapter {
         switch (position) {
             case 0:
                 return new FragmentHome();
-            case 1:
-                return new FragmentProfile();
             default:
                 return new FragmentContact();
         }
