@@ -53,9 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 switch(position){
                     case 0:bottomNav.getMenu().findItem(R.id.bottom_home).setChecked(true);
                         break;
-                    case 1:bottomNav.getMenu().findItem(R.id.bottom_profile).setChecked(true);
-                        break;
-                    case 2:bottomNav.getMenu().findItem(R.id.bottom_contact).setChecked(true);
+                    case 1:bottomNav.getMenu().findItem(R.id.bottom_contact).setChecked(true);
                         break;
                 }
                 bottomNav.getMenu().getItem(position).setChecked(true);
@@ -71,9 +69,7 @@ public class MainActivity extends AppCompatActivity {
             switch(item.getItemId()){
                 case R.id.bottom_home:viewPager.setCurrentItem(0);
                     break;
-                case R.id.bottom_profile:viewPager.setCurrentItem(1);
-                    break;
-                case R.id.bottom_contact:viewPager.setCurrentItem(2);
+                case R.id.bottom_contact:viewPager.setCurrentItem(1);
                     break;
             }
             return true;

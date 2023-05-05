@@ -8,11 +8,6 @@
         android:title="Trang chủ" />
 
     <item
-        android:id="@+id/bottom_profile"
-        android:icon="@drawable/person_24"
-        android:title="Trang Cá nhân" />
-
-    <item
         android:id="@+id/bottom_contact"
         android:icon="@drawable/contacts_24"
         android:title="Liên hệ" />
