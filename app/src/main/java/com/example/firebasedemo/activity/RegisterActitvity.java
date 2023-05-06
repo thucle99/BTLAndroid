@@ -20,9 +20,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -34,7 +31,6 @@ public class RegisterActitvity extends AppCompatActivity {
     protected FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
     private String userID;
-    private DatabaseReference db;
     private ProgressBar progressBar;
 
     @Override
@@ -79,7 +75,6 @@ public class RegisterActitvity extends AppCompatActivity {
 
                             Toast.makeText(RegisterActitvity.this, "User Created.", Toast.LENGTH_SHORT).show();
                             userID = fAuth.getCurrentUser().getUid();
-                            DocumentReference documentReference = fStore.collection("users").document(userID);
                             Map<String,Object> user = new HashMap<>();
                             user.put("fName",fullName);
                             user.put("email",e);

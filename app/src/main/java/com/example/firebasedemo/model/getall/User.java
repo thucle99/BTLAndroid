@@ -1,6 +1,5 @@
 package com.example.firebasedemo.model.getall;
 
-import java.time.OffsetDateTime;
 
 public class User {
     private String id;

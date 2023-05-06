@@ -2,26 +2,13 @@ package com.example.firebasedemo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.example.firebasedemo.activity.LoginActivity;
-import com.example.firebasedemo.model.getall.Welcome;
-import com.example.firebasedemo.service.ImageService;
-
-import java.io.IOException;
-import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;

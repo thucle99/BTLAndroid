@@ -11,12 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FirebaseDemo">
         <activity android:name=".activity.RegisterActitvity" android:exported="true"/>
-        <activity android:name=".activity.AddPostActivity" android:exported="true"/>
         <activity android:name=".activity.AddContactActivity" android:exported="true"/>
         <activity android:name=".activity.EditContactActivity" android:exported="true"/>
-        <activity android:name=".activity.EditProfileActivity" android:exported="true"/>
-        <!--        <activity android:name=".MainActivity" />-->
-<!--        <activity android:name=".activity.LoginActivity">-->
         <activity android:name=".MainActivity" android:exported="true"/>
         <activity android:name=".activity.LoginActivity" android:exported="true">
             <intent-filter>

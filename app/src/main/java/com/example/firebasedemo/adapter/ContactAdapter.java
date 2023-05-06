@@ -1,5 +1,6 @@
 package com.example.firebasedemo.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -37,7 +38,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull ContactAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull ContactAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.textViewName.setText(contacts.get(position).getName());
         holder.textViewAddress.setText(contacts.get(position).getAddress());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +57,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewName, textViewAddress, textViewDateOfBirth,textViewEmail;
+        TextView textViewName, textViewAddress;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             textViewName=itemView.findViewById(R.id.textViewName);
